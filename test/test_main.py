@@ -2,7 +2,8 @@ import pytest
 from faststream.rabbit import TestRabbitBroker
 from pydantic import ValidationError
 
-from backend.main import broker, json_handler, publisher2
+from backend.handler import json_handler, publisher2
+from backend.main import broker
 from config import settings
 
 

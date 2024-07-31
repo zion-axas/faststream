@@ -25,7 +25,9 @@ async def test():
         msg = input("input: ")
         if msg == "json":
             msg = {"name": "IVAN", "user_id": "13"}
-        await broker.publish(msg, queue="que3")
+            await broker.publish(msg, queue="que3")
+            continue
+        await broker.publish(msg, queue="que4")
 
 
 async def main():
