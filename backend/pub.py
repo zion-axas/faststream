@@ -1,5 +1,15 @@
+"""4 варианта отравки сообщений
+
+broker.publish(msg, queue)
+@broker.publisher(queue)                                            # AsyncAPI
+publisher = broker.publisher(queue) => @publisher                   # AsyncAPI; testing
+publisher = broker.publisher(queue) => publisher.publish(msg)       # AsyncAPI; testing
+
+2 и 3 отправляют одно сообщение, но возможна рассылка
+4 способ позволяет отправить несколько сообщений из одной функции
+"""
+
 import asyncio
-# from time import sleep
 
 from faststream import FastStream
 from faststream.rabbit import RabbitBroker
@@ -10,17 +20,12 @@ app = FastStream(broker)
 
 @app.after_startup
 async def test():
-    # tm = 210
     msg = ""
     while msg != "q":
-        # print(tm)
-        # msg = "tsst"
         msg = input("input: ")
         if msg == "json":
             msg = {"name": "IVAN", "user_id": "13"}
-        await broker.publish(msg, queue="test3")
-        # sleep(tm)
-        # tm += 10
+        await broker.publish(msg, queue="que3")
 
 
 async def main():

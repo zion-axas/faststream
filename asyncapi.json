@@ -14,7 +14,7 @@
     }
   },
   "channels": {
-    "test1:_:BaseHandler": {
+    "que1:_:BaseHandler": {
       "servers": [
         "development"
       ],
@@ -23,7 +23,7 @@
           "is": "routingKey",
           "bindingVersion": "0.2.0",
           "queue": {
-            "name": "test1",
+            "name": "que1",
             "durable": false,
             "exclusive": false,
             "autoDelete": false,
@@ -38,17 +38,17 @@
       "subscribe": {
         "bindings": {
           "amqp": {
-            "cc": "test1",
+            "cc": "que1",
             "ack": true,
             "bindingVersion": "0.2.0"
           }
         },
         "message": {
-          "$ref": "#/components/messages/test1:_:BaseHandler:Message"
+          "$ref": "#/components/messages/que1:_:BaseHandler:Message"
         }
       }
     },
-    "test2:_:BaseHandler": {
+    "que2:_:BaseHandler": {
       "servers": [
         "development"
       ],
@@ -57,7 +57,7 @@
           "is": "routingKey",
           "bindingVersion": "0.2.0",
           "queue": {
-            "name": "test2",
+            "name": "que2",
             "durable": false,
             "exclusive": false,
             "autoDelete": false,
@@ -72,17 +72,17 @@
       "subscribe": {
         "bindings": {
           "amqp": {
-            "cc": "test2",
+            "cc": "que2",
             "ack": true,
             "bindingVersion": "0.2.0"
           }
         },
         "message": {
-          "$ref": "#/components/messages/test2:_:BaseHandler:Message"
+          "$ref": "#/components/messages/que2:_:BaseHandler:Message"
         }
       }
     },
-    "test3:_:JsonHandler": {
+    "que3:_:JsonHandler": {
       "servers": [
         "development"
       ],
@@ -91,7 +91,7 @@
           "is": "routingKey",
           "bindingVersion": "0.2.0",
           "queue": {
-            "name": "test3",
+            "name": "que3",
             "durable": false,
             "exclusive": false,
             "autoDelete": false,
@@ -106,17 +106,17 @@
       "subscribe": {
         "bindings": {
           "amqp": {
-            "cc": "test3",
+            "cc": "que3",
             "ack": true,
             "bindingVersion": "0.2.0"
           }
         },
         "message": {
-          "$ref": "#/components/messages/test3:_:JsonHandler:Message"
+          "$ref": "#/components/messages/que3:_:JsonHandler:Message"
         }
       }
     },
-    "test1:_:Publisher": {
+    "que1:_:Publisher": {
       "servers": [
         "development"
       ],
@@ -125,7 +125,7 @@
           "is": "routingKey",
           "bindingVersion": "0.2.0",
           "queue": {
-            "name": "test1",
+            "name": "que1",
             "durable": false,
             "exclusive": false,
             "autoDelete": false,
@@ -140,7 +140,7 @@
       "publish": {
         "bindings": {
           "amqp": {
-            "cc": "test1",
+            "cc": "que1",
             "ack": true,
             "deliveryMode": 1,
             "mandatory": true,
@@ -148,15 +148,51 @@
           }
         },
         "message": {
-          "$ref": "#/components/messages/test1:_:Publisher:Message"
+          "$ref": "#/components/messages/que1:_:Publisher:Message"
+        }
+      }
+    },
+    "que2:_:Publisher": {
+      "servers": [
+        "development"
+      ],
+      "bindings": {
+        "amqp": {
+          "is": "routingKey",
+          "bindingVersion": "0.2.0",
+          "queue": {
+            "name": "que2",
+            "durable": false,
+            "exclusive": false,
+            "autoDelete": false,
+            "vhost": "/"
+          },
+          "exchange": {
+            "type": "default",
+            "vhost": "/"
+          }
+        }
+      },
+      "publish": {
+        "bindings": {
+          "amqp": {
+            "cc": "que2",
+            "ack": true,
+            "deliveryMode": 1,
+            "mandatory": true,
+            "bindingVersion": "0.2.0"
+          }
+        },
+        "message": {
+          "$ref": "#/components/messages/que2:_:Publisher:Message"
         }
       }
     }
   },
   "components": {
     "messages": {
-      "test1:_:BaseHandler:Message": {
-        "title": "test1:_:BaseHandler:Message",
+      "que1:_:BaseHandler:Message": {
+        "title": "que1:_:BaseHandler:Message",
         "correlationId": {
           "location": "$message.header#/correlation_id"
         },
@@ -164,8 +200,8 @@
           "$ref": "#/components/schemas/UserInfo"
         }
       },
-      "test2:_:BaseHandler:Message": {
-        "title": "test2:_:BaseHandler:Message",
+      "que2:_:BaseHandler:Message": {
+        "title": "que2:_:BaseHandler:Message",
         "correlationId": {
           "location": "$message.header#/correlation_id"
         },
@@ -173,8 +209,8 @@
           "$ref": "#/components/schemas/UserInfo"
         }
       },
-      "test3:_:JsonHandler:Message": {
-        "title": "test3:_:JsonHandler:Message",
+      "que3:_:JsonHandler:Message": {
+        "title": "que3:_:JsonHandler:Message",
         "correlationId": {
           "location": "$message.header#/correlation_id"
         },
@@ -189,13 +225,22 @@
           ]
         }
       },
-      "test1:_:Publisher:Message": {
-        "title": "test1:_:Publisher:Message",
+      "que1:_:Publisher:Message": {
+        "title": "que1:_:Publisher:Message",
         "correlationId": {
           "location": "$message.header#/correlation_id"
         },
         "payload": {
-          "$ref": "#/components/schemas/test1:_:PublisherPayload"
+          "$ref": "#/components/schemas/que1:_:PublisherPayload"
+        }
+      },
+      "que2:_:Publisher:Message": {
+        "title": "que2:_:Publisher:Message",
+        "correlationId": {
+          "location": "$message.header#/correlation_id"
+        },
+        "payload": {
+          "$ref": "#/components/schemas/que2:_:PublisherPayload"
         }
       }
     },
@@ -246,7 +291,8 @@
         "title": "DefaultHandler:Message:Payload",
         "type": "string"
       },
-      "test1:_:PublisherPayload": {}
+      "que1:_:PublisherPayload": {},
+      "que2:_:PublisherPayload": {}
     }
   }
 }
