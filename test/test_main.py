@@ -30,6 +30,6 @@ async def test_handle_1():
 @pytest.mark.asyncio
 async def test_handle_2():
     async with TestRabbitBroker(broker) as br:
-        await br.publish("", queue="que4")
+        await br.publish("Hi!", queue="que4")
         # to check the outgoing message body:
-        # publisher2.mock.assert_called_once_with("Hi!")
+        publisher2.mock.assert_called_once_with("Hi!")

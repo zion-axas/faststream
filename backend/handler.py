@@ -2,6 +2,7 @@ import logging
 from typing import Annotated
 
 from annotated_types import Len
+from faststream import Context
 from faststream.rabbit import RabbitRouter
 from pydantic import BaseModel, Field, PositiveInt
 

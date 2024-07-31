@@ -9,6 +9,8 @@ publisher = broker.publisher(queue) => publisher.publish(msg)       # AsyncAPI; 
 4 способ позволяет отправить несколько сообщений из одной функции
 """
 
+# python backend/pub.py :: [str], json, Hello, q
+
 import asyncio
 
 from faststream import FastStream
