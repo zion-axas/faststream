@@ -1,0 +1,252 @@
+{
+  "asyncapi": "2.6.0",
+  "defaultContentType": "application/json",
+  "info": {
+    "title": "FastStream",
+    "version": "0.1.0",
+    "description": ""
+  },
+  "servers": {
+    "development": {
+      "url": "amqp://guest:guest@localhost:5672/",
+      "protocol": "amqp",
+      "protocolVersion": "0.9.1"
+    }
+  },
+  "channels": {
+    "test1:_:BaseHandler": {
+      "servers": [
+        "development"
+      ],
+      "bindings": {
+        "amqp": {
+          "is": "routingKey",
+          "bindingVersion": "0.2.0",
+          "queue": {
+            "name": "test1",
+            "durable": false,
+            "exclusive": false,
+            "autoDelete": false,
+            "vhost": "/"
+          },
+          "exchange": {
+            "type": "default",
+            "vhost": "/"
+          }
+        }
+      },
+      "subscribe": {
+        "bindings": {
+          "amqp": {
+            "cc": "test1",
+            "ack": true,
+            "bindingVersion": "0.2.0"
+          }
+        },
+        "message": {
+          "$ref": "#/components/messages/test1:_:BaseHandler:Message"
+        }
+      }
+    },
+    "test2:_:BaseHandler": {
+      "servers": [
+        "development"
+      ],
+      "bindings": {
+        "amqp": {
+          "is": "routingKey",
+          "bindingVersion": "0.2.0",
+          "queue": {
+            "name": "test2",
+            "durable": false,
+            "exclusive": false,
+            "autoDelete": false,
+            "vhost": "/"
+          },
+          "exchange": {
+            "type": "default",
+            "vhost": "/"
+          }
+        }
+      },
+      "subscribe": {
+        "bindings": {
+          "amqp": {
+            "cc": "test2",
+            "ack": true,
+            "bindingVersion": "0.2.0"
+          }
+        },
+        "message": {
+          "$ref": "#/components/messages/test2:_:BaseHandler:Message"
+        }
+      }
+    },
+    "test3:_:JsonHandler": {
+      "servers": [
+        "development"
+      ],
+      "bindings": {
+        "amqp": {
+          "is": "routingKey",
+          "bindingVersion": "0.2.0",
+          "queue": {
+            "name": "test3",
+            "durable": false,
+            "exclusive": false,
+            "autoDelete": false,
+            "vhost": "/"
+          },
+          "exchange": {
+            "type": "default",
+            "vhost": "/"
+          }
+        }
+      },
+      "subscribe": {
+        "bindings": {
+          "amqp": {
+            "cc": "test3",
+            "ack": true,
+            "bindingVersion": "0.2.0"
+          }
+        },
+        "message": {
+          "$ref": "#/components/messages/test3:_:JsonHandler:Message"
+        }
+      }
+    },
+    "test1:_:Publisher": {
+      "servers": [
+        "development"
+      ],
+      "bindings": {
+        "amqp": {
+          "is": "routingKey",
+          "bindingVersion": "0.2.0",
+          "queue": {
+            "name": "test1",
+            "durable": false,
+            "exclusive": false,
+            "autoDelete": false,
+            "vhost": "/"
+          },
+          "exchange": {
+            "type": "default",
+            "vhost": "/"
+          }
+        }
+      },
+      "publish": {
+        "bindings": {
+          "amqp": {
+            "cc": "test1",
+            "ack": true,
+            "deliveryMode": 1,
+            "mandatory": true,
+            "bindingVersion": "0.2.0"
+          }
+        },
+        "message": {
+          "$ref": "#/components/messages/test1:_:Publisher:Message"
+        }
+      }
+    }
+  },
+  "components": {
+    "messages": {
+      "test1:_:BaseHandler:Message": {
+        "title": "test1:_:BaseHandler:Message",
+        "correlationId": {
+          "location": "$message.header#/correlation_id"
+        },
+        "payload": {
+          "$ref": "#/components/schemas/UserInfo"
+        }
+      },
+      "test2:_:BaseHandler:Message": {
+        "title": "test2:_:BaseHandler:Message",
+        "correlationId": {
+          "location": "$message.header#/correlation_id"
+        },
+        "payload": {
+          "$ref": "#/components/schemas/UserInfo"
+        }
+      },
+      "test3:_:JsonHandler:Message": {
+        "title": "test3:_:JsonHandler:Message",
+        "correlationId": {
+          "location": "$message.header#/correlation_id"
+        },
+        "payload": {
+          "oneOf": [
+            {
+              "$ref": "#/components/schemas/JsonHandler:Message:Payload"
+            },
+            {
+              "$ref": "#/components/schemas/DefaultHandler:Message:Payload"
+            }
+          ]
+        }
+      },
+      "test1:_:Publisher:Message": {
+        "title": "test1:_:Publisher:Message",
+        "correlationId": {
+          "location": "$message.header#/correlation_id"
+        },
+        "payload": {
+          "$ref": "#/components/schemas/test1:_:PublisherPayload"
+        }
+      }
+    },
+    "schemas": {
+      "UserInfo": {
+        "properties": {
+          "name": {
+            "maxLength": 20,
+            "minLength": 2,
+            "title": "Name",
+            "type": "string"
+          },
+          "user_id": {
+            "examples": [
+              1
+            ],
+            "exclusiveMinimum": 0,
+            "title": "User Id",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "name",
+          "user_id"
+        ],
+        "title": "UserInfo",
+        "type": "object"
+      },
+      "JsonHandler:Message:Payload": {
+        "properties": {
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "user_id": {
+            "title": "User Id",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "name",
+          "user_id"
+        ],
+        "title": "JsonHandler:Message:Payload",
+        "type": "object"
+      },
+      "DefaultHandler:Message:Payload": {
+        "title": "DefaultHandler:Message:Payload",
+        "type": "string"
+      },
+      "test1:_:PublisherPayload": {}
+    }
+  }
+}

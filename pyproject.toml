@@ -1,0 +1,32 @@
+[tool.poetry]
+name = "faststream_"
+version = "0.1.0"
+description = ""
+authors = ["zion <zion4axas@gmail.com>"]
+readme = "README.md"
+#package-mode = false
+packages = [
+    { include = "backend" }
+]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+faststream = {extras = ["rabbit"], version = "^0.5.15"}
+pytest = {extras = ["all"], version = "^8.3.2"}
+pytest-asyncio = "^0.23.8"
+urllib3 = "^2.2.2"
+more-itertools = "^10.3.0"
+poetry-plugin-dotenv = "^2.2.3"
+pydantic-settings = "^2.4.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+start = "backend.main:app"
+
+[tool.pytest.ini_options]
+addopts = "-s -v"
+testpaths = ["test"]
