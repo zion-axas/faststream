@@ -1,3 +1,5 @@
+# https://faststream.airt.ai/latest/rabbit/publishing/
+
 """4 варианта отравки сообщений
 
 broker.publish(msg, queue)
@@ -9,14 +11,17 @@ publisher = broker.publisher(queue) => publisher.publish(msg)       # AsyncAPI; 
 4 способ позволяет отправить несколько сообщений из одной функции
 """
 
-# python backend/pub.py :: [str], json, Hello, q
+# python backend/pub.py :: [str], [..], [int], json, q
 
 import asyncio
+import time
 
 from faststream import FastStream
 from faststream.rabbit import RabbitBroker
 
-broker = RabbitBroker("amqp://guest:guest@localhost:5672/")
+from config import settings
+
+broker = RabbitBroker(settings.BROKER)
 app = FastStream(broker)
 
 
@@ -29,6 +34,10 @@ async def test():
             msg = {"name": "IVAN", "user_id": "13"}
             await broker.publish(msg, queue="que3")
             continue
+        if msg.isnumeric():
+            for i in range(int(msg)):
+                await broker.publish(f"test_message {i}", queue="que4")
+                time.sleep(0.2)
         await broker.publish(msg, queue="que4")
 
 

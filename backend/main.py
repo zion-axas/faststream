@@ -3,12 +3,12 @@ from faststream.rabbit import RabbitBroker
 
 from backend.handler import router as router_handler
 from backend.context import router as router_context
-from config import configure_logging
+from config import configure_logging, settings
 
 configure_logging()
 
 
-broker = RabbitBroker("amqp://guest:guest@localhost:5672/")
+broker = RabbitBroker(settings.BROKER)
 # apply_types=False  - decorator disable Pydantic validation, Depends, Context
 # validate=False  - disable validation
 

@@ -13,6 +13,8 @@ def configure_logging(level=logging.INFO):
 
 
 class Settings(BaseSettings):
+    BROKER: str = "amqp://user:password@87.249.49.97:5672/"  # http://87.249.49.97:15672
+    LOCAL: str = "amqp://guest:guest@localhost:5672/"
     TEST_ID: int = 0
 
 

@@ -1,8 +1,8 @@
 import logging
+import time
 from typing import Annotated
 
 from annotated_types import Len
-from faststream import Context
 from faststream.rabbit import RabbitRouter
 from pydantic import BaseModel, Field, PositiveInt
 
@@ -38,6 +38,7 @@ subscriber3 = router.subscriber("que3")
 # @broker.publisher("que2")  # broadcast
 async def json_handler(name: str, user_id: int):
     log.info("%s, %s", name, user_id)
+    time.sleep(2)
     return {"name": name, "user_id": user_id}
 
 
@@ -62,6 +63,7 @@ subscriber4 = router.subscriber("que4")
 @subscriber4
 async def default_handler_4(msg: str):
     log.info(msg)
+    time.sleep(msg.count("."))
     return msg
 
 
