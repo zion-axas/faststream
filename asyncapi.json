@@ -8,13 +8,13 @@
   },
   "servers": {
     "development": {
-      "url": "amqp://guest:guest@localhost:5672/",
+      "url": "amqp://user:password@87.249.49.97:5672/",
       "protocol": "amqp",
       "protocolVersion": "0.9.1"
     }
   },
   "channels": {
-    "que1:_:BaseHandler": {
+    "que1:_:BaseHandler1": {
       "servers": [
         "development"
       ],
@@ -44,11 +44,11 @@
           }
         },
         "message": {
-          "$ref": "#/components/messages/que1:_:BaseHandler:Message"
+          "$ref": "#/components/messages/que1:_:BaseHandler1:Message"
         }
       }
     },
-    "que2:_:BaseHandler": {
+    "que2:_:BaseHandler2": {
       "servers": [
         "development"
       ],
@@ -78,7 +78,7 @@
           }
         },
         "message": {
-          "$ref": "#/components/messages/que2:_:BaseHandler:Message"
+          "$ref": "#/components/messages/que2:_:BaseHandler2:Message"
         }
       }
     },
@@ -113,6 +113,108 @@
         },
         "message": {
           "$ref": "#/components/messages/que3:_:JsonHandler:Message"
+        }
+      }
+    },
+    "que4:_:DefaultHandler4": {
+      "servers": [
+        "development"
+      ],
+      "bindings": {
+        "amqp": {
+          "is": "routingKey",
+          "bindingVersion": "0.2.0",
+          "queue": {
+            "name": "que4",
+            "durable": false,
+            "exclusive": false,
+            "autoDelete": false,
+            "vhost": "/"
+          },
+          "exchange": {
+            "type": "default",
+            "vhost": "/"
+          }
+        }
+      },
+      "subscribe": {
+        "bindings": {
+          "amqp": {
+            "cc": "que4",
+            "ack": true,
+            "bindingVersion": "0.2.0"
+          }
+        },
+        "message": {
+          "$ref": "#/components/messages/que4:_:DefaultHandler4:Message"
+        }
+      }
+    },
+    "que5:_:Handler5": {
+      "servers": [
+        "development"
+      ],
+      "bindings": {
+        "amqp": {
+          "is": "routingKey",
+          "bindingVersion": "0.2.0",
+          "queue": {
+            "name": "que5",
+            "durable": false,
+            "exclusive": false,
+            "autoDelete": false,
+            "vhost": "/"
+          },
+          "exchange": {
+            "type": "default",
+            "vhost": "/"
+          }
+        }
+      },
+      "subscribe": {
+        "bindings": {
+          "amqp": {
+            "cc": "que5",
+            "ack": true,
+            "bindingVersion": "0.2.0"
+          }
+        },
+        "message": {
+          "$ref": "#/components/messages/que5:_:Handler5:Message"
+        }
+      }
+    },
+    "que6:_:Handler6": {
+      "servers": [
+        "development"
+      ],
+      "bindings": {
+        "amqp": {
+          "is": "routingKey",
+          "bindingVersion": "0.2.0",
+          "queue": {
+            "name": "que6",
+            "durable": false,
+            "exclusive": false,
+            "autoDelete": false,
+            "vhost": "/"
+          },
+          "exchange": {
+            "type": "default",
+            "vhost": "/"
+          }
+        }
+      },
+      "subscribe": {
+        "bindings": {
+          "amqp": {
+            "cc": "que6",
+            "ack": true,
+            "bindingVersion": "0.2.0"
+          }
+        },
+        "message": {
+          "$ref": "#/components/messages/que6:_:Handler6:Message"
         }
       }
     },
@@ -191,8 +293,8 @@
   },
   "components": {
     "messages": {
-      "que1:_:BaseHandler:Message": {
-        "title": "que1:_:BaseHandler:Message",
+      "que1:_:BaseHandler1:Message": {
+        "title": "que1:_:BaseHandler1:Message",
         "correlationId": {
           "location": "$message.header#/correlation_id"
         },
@@ -200,13 +302,13 @@
           "$ref": "#/components/schemas/UserInfo"
         }
       },
-      "que2:_:BaseHandler:Message": {
-        "title": "que2:_:BaseHandler:Message",
+      "que2:_:BaseHandler2:Message": {
+        "title": "que2:_:BaseHandler2:Message",
         "correlationId": {
           "location": "$message.header#/correlation_id"
         },
         "payload": {
-          "$ref": "#/components/schemas/UserInfo"
+          "$ref": "#/components/schemas/BaseHandler2:Message:Payload"
         }
       },
       "que3:_:JsonHandler:Message": {
@@ -220,9 +322,36 @@
               "$ref": "#/components/schemas/JsonHandler:Message:Payload"
             },
             {
-              "$ref": "#/components/schemas/DefaultHandler:Message:Payload"
+              "$ref": "#/components/schemas/DefaultHandler3:Message:Payload"
             }
           ]
+        }
+      },
+      "que4:_:DefaultHandler4:Message": {
+        "title": "que4:_:DefaultHandler4:Message",
+        "correlationId": {
+          "location": "$message.header#/correlation_id"
+        },
+        "payload": {
+          "$ref": "#/components/schemas/DefaultHandler4:Message:Payload"
+        }
+      },
+      "que5:_:Handler5:Message": {
+        "title": "que5:_:Handler5:Message",
+        "correlationId": {
+          "location": "$message.header#/correlation_id"
+        },
+        "payload": {
+          "$ref": "#/components/schemas/Handler5:Message:Payload"
+        }
+      },
+      "que6:_:Handler6:Message": {
+        "title": "que6:_:Handler6:Message",
+        "correlationId": {
+          "location": "$message.header#/correlation_id"
+        },
+        "payload": {
+          "$ref": "#/components/schemas/Handler6:Message:Payload"
         }
       },
       "que1:_:Publisher:Message": {
@@ -269,6 +398,10 @@
         "title": "UserInfo",
         "type": "object"
       },
+      "BaseHandler2:Message:Payload": {
+        "title": "BaseHandler2:Message:Payload",
+        "type": "string"
+      },
       "JsonHandler:Message:Payload": {
         "properties": {
           "name": {
@@ -287,8 +420,20 @@
         "title": "JsonHandler:Message:Payload",
         "type": "object"
       },
-      "DefaultHandler:Message:Payload": {
-        "title": "DefaultHandler:Message:Payload",
+      "DefaultHandler3:Message:Payload": {
+        "title": "DefaultHandler3:Message:Payload",
+        "type": "string"
+      },
+      "DefaultHandler4:Message:Payload": {
+        "title": "DefaultHandler4:Message:Payload",
+        "type": "string"
+      },
+      "Handler5:Message:Payload": {
+        "title": "Handler5:Message:Payload",
+        "type": "string"
+      },
+      "Handler6:Message:Payload": {
+        "title": "Handler6:Message:Payload",
         "type": "string"
       },
       "que1:_:PublisherPayload": {},

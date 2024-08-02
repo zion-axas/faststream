@@ -6,6 +6,8 @@ key: str=Context(default=None, cast=True)
 lst: list[str]=Context(initial=list)
 """
 
+from typing import Annotated
+
 from faststream import Context, ContextRepo, Logger, apply_types
 from faststream.rabbit import RabbitMessage, RabbitRouter
 from faststream.rabbit.annotations import (
@@ -18,27 +20,33 @@ from faststream.rabbit.annotations import (
 )
 
 router = RabbitRouter()
+CorrelationId = Annotated[
+    str, Context("message.correlation_id", default=None, cast=True)
+]
 
 
+# que5 catches after_startup 'Hello' message
 @router.subscriber("que5")
-async def base_handler(
+async def handler_5(
     msg: str,
+    correlation_id: CorrelationId,
+    headers: str = Context("message.headers.user", default=""),
     context=Context(),  # the context itself, in which you can write your own fields
     broker=Context(),  # the current broker
     logger=Context(),  # the logger used for your broker (tags messages with message_id)
     message=Context(),  # the raw message (if you need access to it)
-    correlation_id: str = Context("message.correlation_id", default=None, cast=True),
-    headers: str = Context("message.headers.user", default=None),
 ):
+    # using context to store own object
     context.set_global("secret_str", "my-perfect-secret")  # set global
+
     if msg == "Hello":
-        logger.warning("raw: %s", message)
+        logger.warning("RAW:\n%s", message)
         await broker.publish(msg, queue="que6")
     logger.info(msg)
 
 
 @router.subscriber("que6")
-async def base_handler_(
+async def handler_6(
     msg: str,
     broker: RabbitBroker,  # the current broker
     context: ContextRepo,  # the context itself, in which you can write your own fields
@@ -58,6 +66,11 @@ async def base_handler_(
         call()
 
 
+# По умолчанию поля контекста НЕ ПРИВОДЯТСЯ к типу, указанному в их аннотации:
+# secret: int = Context() - str не приведется к int
+# cast=True - привести к типу
+
+
 @apply_types
 def call(
     logger: Logger,
@@ -70,8 +83,3 @@ def call(
     logger.warning("call() - %s", new_name_another_secret)
 
     collector.append(another_secret)
-
-
-# По умолчанию поля контекста НЕ ПРИВОДЯТСЯ к типу, указанному в их аннотации:
-# secret: int = Context() - str не приведется к int
-# cast=True - привести к типу

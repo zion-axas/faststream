@@ -1,5 +1,7 @@
 # https://faststream.airt.ai/latest/rabbit/publishing/
 
+# python backend/pub.py :: [str], [..], [int], json, q
+
 """4 варианта отравки сообщений
 
 broker.publish(msg, queue)
@@ -10,8 +12,6 @@ publisher = broker.publisher(queue) => publisher.publish(msg)       # AsyncAPI; 
 2 и 3 отправляют одно сообщение, но возможна рассылка
 4 способ позволяет отправить несколько сообщений из одной функции
 """
-
-# python backend/pub.py :: [str], [..], [int], json, q
 
 import asyncio
 import time
