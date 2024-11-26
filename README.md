@@ -1,11 +1,18 @@
 ??? poetry self add pydantic-settings
 
+### run broker
 docker run -d --rm -p 5672:5672 --name test-mq rabbitmq:alpine
 
+### run faststream
 poetry run faststream run backend.main:app
+
+### run test
 poetry run pytest
 
+### generate AsyncAPO scheme to asyncapi.json
 faststream docs gen backend.main:app
+
+### serve docs on localhost:8000
 faststream docs serve backend.main:app
 
 

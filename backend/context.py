@@ -40,7 +40,7 @@ async def handler_5(
     context.set_global("secret_str", "my-perfect-secret")  # set global
 
     if msg == "Hello":
-        logger.warning("RAW:\n%s", message)
+        logger.warning("RAW:\n%.200s", message)
         await broker.publish(msg, queue="que6")
     logger.info(msg)
 
